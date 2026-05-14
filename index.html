@@ -307,11 +307,15 @@
         <form class="contact-form reveal">
           <label>
             <span>Name</span>
-            <input type="text" name="name" autocomplete="name" />
+            <input type="text" name="name" autocomplete="name" required />
           </label>
           <label>
             <span>Email</span>
             <input type="email" name="email" autocomplete="email" />
+          </label>
+          <label>
+            <span>Phone</span>
+            <input type="tel" name="phone" autocomplete="tel" required />
           </label>
           <label>
             <span>Property type</span>
@@ -321,12 +325,30 @@
               <option>Industrial</option>
             </select>
           </label>
+          <label>
+            <span>Required load</span>
+            <input
+              type="text"
+              name="load"
+              autocomplete="off"
+              placeholder="Example: 3 kW, 5 kW, monthly bill"
+            />
+          </label>
+          <label>
+            <span>Message</span>
+            <textarea
+              name="message"
+              rows="4"
+              placeholder="Tell us about your roof, location, or estimate requirement"
+            ></textarea>
+          </label>
           <button class="button button-primary" type="submit">
             <span>Request estimate</span>
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M5 12h14m-6-6 6 6-6 6" />
             </svg>
           </button>
+          <p class="form-status" role="status" aria-live="polite"></p>
         </form>
       </section>
     </main>
