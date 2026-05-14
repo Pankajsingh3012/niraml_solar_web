@@ -946,6 +946,16 @@ button {
   color: #79e5b6;
 }
 
+.footer-map-link {
+  display: grid;
+  gap: 6px;
+}
+
+.footer-map-link:hover .footer-icon {
+  border-color: rgba(121, 229, 182, 0.68);
+  background: rgba(121, 229, 182, 0.12);
+}
+
 .social-links {
   display: grid;
   gap: 8px;
