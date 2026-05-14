@@ -14,6 +14,24 @@ const requiredEnv = (name) => {
   return value;
 };
 
+const readBody = async (request) => {
+  if (typeof request.body === "string") {
+    return request.body ? JSON.parse(request.body) : {};
+  }
+
+  if (request.body && typeof request.body === "object") {
+    return request.body;
+  }
+
+  const chunks = [];
+  for await (const chunk of request) {
+    chunks.push(chunk);
+  }
+
+  const rawBody = Buffer.concat(chunks).toString("utf8");
+  return rawBody ? JSON.parse(rawBody) : {};
+};
+
 module.exports = async (request, response) => {
   if (request.method !== "POST") {
     response.setHeader("Allow", "POST");
@@ -24,6 +42,7 @@ module.exports = async (request, response) => {
     const apiKey = requiredEnv("RESEND_API_KEY");
     const to = process.env.RESEND_TO || "pankajsingh30122001@gmail.com";
     const from = process.env.RESEND_FROM || "onboarding@resend.dev";
+    const body = await readBody(request);
     const {
       name = "",
       email = "",
@@ -31,7 +50,7 @@ module.exports = async (request, response) => {
       property = "",
       load = "",
       message = "",
-    } = request.body || {};
+    } = body;
 
     if (!name.trim() || !phone.trim()) {
       return response.status(400).json({
@@ -68,7 +87,6 @@ module.exports = async (request, response) => {
       body: JSON.stringify({
         from,
         to,
-        reply_to: email || undefined,
         subject: `New solar estimate request from ${name}`,
         html: `
           <div style="font-family:Arial,sans-serif;color:#08233f;">
@@ -95,4 +113,10 @@ module.exports = async (request, response) => {
       error: error.message || "Unable to send estimate request.",
     });
   }
+};
+
+module.exports.config = {
+  api: {
+    bodyParser: false,
+  },
 };
